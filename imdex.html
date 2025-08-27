@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Server Deployment</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+        const { motion } = framerMotion;
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('overview');
+            
+            const steps = [
+                {
+                    id: 1,
+                    title: "Создание репозитория",
+                    description: "Создайте новый репозиторий на GitHub с вашим проектом",
+                    icon: "📦"
+                },
+                {
+                    id: 2,
+                    title: "Настройка CI/CD",
+                    description: "Настройте GitHub Actions для автоматического деплоя",
+                    icon: "⚙️"
+                },
+                {
+                    id: 3,
+                    title: "Подключение к хостингу",
+                    description: "Выберите подходящий хостинг для размещения вашего сервера",
+                    icon: "💻"
+                },
+                {
+                    id: 4,
+                    title: "Деплой и тестирование",
+                    description: "Запустите автоматический деплой и протестируйте сервер",
+                    icon: "🚀"
+                }
+            ];
+
+            const hostingOptions = [
+                {
+                    name: "VPS",
+                    description: "Выделенный сервер с полным контролем",
+                    price: "от $5/мес",
+                    features: ["Полный доступ", "Масштабируемость", "Безопасность"]
+                },
+                {
+                    name: "Cloud Hosting",
+                    description: "Облачные решения с автоматическим масштабированием",
+                    price: "от $10/мес",
+                    features: ["Автоматическое масштабирование", "Высокая доступность", "Быстрое развертывание"]
+                },
+                {
+                    name: "Docker",
+                    description: "Контейнеризация для простого развертывания",
+                    price: "бесплатно",
+                    features: ["Портативность", "Изоляция", "Легкость"]
+                }
+            ];
+
+            const benefits = [
+                {
+                    title: "Автоматизация",
+                    description: "GitHub Actions автоматически деплоят ваш код при каждом коммите",
+                    icon: "🤖"
+                },
+                {
+                    title: "Безопасность",
+                    description: "Интеграция с GitHub Security для защиты ваших проектов",
+                    icon: "🔒"
+                },
+                {
+                    title: "Масштабируемость",
+                    description: "Легко масштабируйте сервер под растущие потребности",
+                    icon: "📈"
+                }
+            ];
+
+            return (
+                <div style={{
+                    minHeight: '100vh',
+                    background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)'
+                }}>
+                    {/* Header */}
+                    <header style={{
+                        borderBottom: '1px solid rgba(148, 163, 184, 0.2)',
+                        padding: '1rem'
+                    }}>
+                        <div style={{
+                            maxWidth: '768px',
+                            margin: '0 auto',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '1rem'
+                        }}>
+                            <div style={{
+                                backgroundColor: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+                                padding: '0.5rem',
+                                borderRadius: '0.5rem'
+                            }}>
+                                <span style={{ fontSize: '1.5rem' }}>🐙</span>
+                            </div>
+                            <div>
+                                <h1 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff' }}>
+                                    GitHub Server Deployment
+                                </h1>
+                                <p style={{ color: '#94a3b8' }}>Как поднять свой сервер через GitHub</p>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* Navigation Tabs */}
+                    <div style={{
+                        maxWidth: '768px',
+                        margin: '2rem auto',
+                        padding: '0 1rem'
+                    }}>
+                        <div style={{
+                            display: 'flex',
+                            gap: '0.25rem',
+                            backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                            padding: '0.25rem',
+                            borderRadius: '0.5rem'
+                        }}>
+                            {['overview', 'steps', 'hosting', 'benefits'].map((tab) => (
+                                <button
+                                    key={tab}
+                                    onClick={() => setActiveTab(tab)}
+                                    style={{
+                                        flex: 1,
+                                        padding: '0.75rem',
+                                        borderRadius: '0.375rem',
+                                        fontSize: '0.875rem',
+                                        fontWeight: '500',
+                                        transition: 'all 0.2s',
+                                        backgroundColor: activeTab === tab 
+                                            ? '#8b5cf6' 
+                                            : 'transparent',
+                                        color: activeTab === tab ? '#fff' : '#94a3b8',
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {tab === 'overview' && 'Обзор'}
+                                    {tab === 'steps' && 'Шаги'}
+                                    {tab === 'hosting' && 'Хостинг'}
+                                    {tab === 'benefits' && 'Преимущества'}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Content */}
+                    <div style={{ maxWidth: '768px', margin: '0 auto', padding: '0 1rem' }}>
+                        {activeTab === 'overview' && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: '1fr 1fr',
+                                    gap: '2rem',
+                                    alignItems: 'center'
+                                }}>
+                                    <div>
+                                        <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#fff', marginBottom: '1rem' }}>
+                                            Поднятие сервера через GitHub
+                                        </h2>
+                                        <p style={{ color: '#94a3b8', fontSize: '1.125rem', lineHeight: '1.6' }}>
+                                            Автоматизируйте процесс развертывания вашего сервера с помощью GitHub Actions. 
+                                            Создавайте, тестируйте и деплоите ваш проект без ручного вмешательства.
+                                        </p>
+                                        <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#10b981' }}>
+                                                <span>✓</span>
+                                                <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>Автоматический деплой</span>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#3b82f6' }}>
+                                                <span>✓</span>
+                                                <span style={{ fontSize: '0.875rem', fontWeight: '500' }}>Надежная инфраструктура</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{
+                                        backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                                        backdropFilter: 'blur(10px)',
+                                        borderRadius: '0.75rem',
+                                        padding: '1.5rem',
+                                        border: '1px solid rgba(148, 163, 184, 0.2)'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                                            <h3 style={{ color: '#fff', fontWeight: '600' }}>Пример workflow</h3>
+                                            <span style={{ fontSize: '1rem', color: '#8b5cf6' }}>💻</span>
+                                        </div>
+                                        <pre style={{
+                                            fontSize: '0.75rem',
+                                            color: '#94a3b8',
+                                            backgroundColor: 'rgba(15, 23, 42, 0.5)',
+                                            padding: '1rem',
+                                            borderRadius: '0.5rem',
+                                            overflowX: 'auto'
+                                        }}>
+{`name: Deploy to Server
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Deploy
+      run: |
+        ssh user@server "cd project && git pull"`}</pre>
+                                    </div>
+                                </div>
+
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(3, 1fr)',
+                                    gap: '1.5rem'
+                                }}>
+                                    {[
+                                        { number: "1000+", label: "Проектов развернуто", icon: "🌐" },
+                                        { number: "99.9%", label: "Доступность", icon: "✅" },
+                                        { number: "24/7", label: "Поддержка", icon: "👥" }
+                                    ].map((stat, index) => (
+                                        <div key={index} style={{
+                                            backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                                            backdropFilter: 'blur(10px)',
+                                            borderRadius: '0.75rem',
+                                            padding: '1.5rem',
+                                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                                            textAlign: 'center'
+                                        }}>
+                                            <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem', color: '#8b5cf6' }}>
+                                                {stat.icon}
+                                            </div>
+                                            <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#fff', marginBottom: '0.25rem' }}>
+                                                {stat.number}
+                                            </div>
+                                            <div style={{ fontSize: '0.875rem', color: '#94a3b8' }}>
+                                                {stat.label}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'steps' && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                                    <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#fff', marginBottom: '1rem' }}>
+                                        Пошаговое руководство
+                                    </h2>
+                                    <p style={{ color: '#94a3b8', maxWidth: '48rem', margin: '0 auto' }}>
+                                        Следуйте этим шагам для автоматического развертывания вашего сервера через GitHub
+                                    </p>
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                    {steps.map((step, index) => (
+                                        <div key={step.id} style={{
+                                            backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                                            backdropFilter: 'blur(10px)',
+                                            borderRadius: '0.75rem',
+                                            padding: '1.5rem',
+                                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                                            display: 'flex',
+                                            alignItems: 'flex-start',
+                                            gap: '1rem'
+                                        }}>
+                                            <div style={{
+                                                width: '3rem',
+                                                height: '3rem',
+                                                backgroundColor: 'linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%)',
+                                                borderRadius: '0.5rem',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: '1.25rem',
+                                                color: '#fff'
+                                            }}>
+                                                {step.icon}
+                                            </div>
+                                            <div style={{ flex: 1 }}>
+                                                <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#fff', marginBottom: '0.5rem' }}>
+                                                    Шаг {step.id}: {step.title}
+                                                </h3>
+                                                <p style={{ color: '#94a3b8' }}>{step.description}</p>
+                                            </div>
+                                            <span style={{ fontSize: '1rem', color: '#94a3b8', marginTop: '0.5rem' }}>→</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'hosting' && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                                    <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#fff', marginBottom: '1rem' }}>
+                                        Варианты хостинга
+                                    </h2>
+                                    <p style={{ color: '#94a3b8', maxWidth: '48rem', margin: '0 auto' }}>
+                                        Выберите подходящую инфраструктуру для размещения вашего сервера
+                                    </p>
+                                </div>
+
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                                    gap: '1.5rem'
+                                }}>
+                                    {hostingOptions.map((option, index) => (
+                                        <div key={index} style={{
+                                            backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                                            backdropFilter: 'blur(10px)',
+                                            borderRadius: '0.75rem',
+                                            padding: '1.5rem',
+                                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                                            transition: 'all 0.2s',
+                                            cursor: 'pointer'
+                                        }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                                                <div style={{ fontSize: '2rem' }}>
+                                                    {index === 0 && '💻'}
+                                                    {index === 1 && '☁️'}
+                                                    {index === 2 && '🐳'}
+                                                </div>
+                                                <span style={{ fontSize: '0.875rem', fontWeight: '500', color: '#10b981' }}>
+                                                    {option.price}
+                                                </span>
+                                            </div>
+                                            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#fff', marginBottom: '0.5rem' }}>
+                                                {option.name}
+                                            </h3>
+                                            <p style={{ color: '#94a3b8', marginBottom: '1rem' }}>
+                                                {option.description}
+                                            </p>
+                                            <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                                {option.features.map((feature, idx) => (
+                                                    <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#94a3b8' }}>
+                                                        <span style={{ color: '#10b981' }}>✓</span>
+                                                        {feature}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {activeTab === 'benefits' && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                                <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                                    <h2 style={{ fontSize: '1.875rem', fontWeight: 'bold', color: '#fff', marginBottom: '1rem' }}>
+                                        Преимущества
+                                    </h2>
+                                    <p style={{ color: '#94a3b8', maxWidth: '48rem', margin: '0 auto' }}>
+                                        Почему стоит использовать GitHub для развертывания серверов
+                                    </p>
+                                </div>
+
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                                    gap: '1.5rem'
+                                }}>
+                                    {benefits.map((benefit, index) => (
+                                        <div key={index} style={{
+                                            backgroundColor: 'rgba(30, 41, 59, 0.5)',
+                                            backdropFilter: 'blur(10px)',
+                                            borderRadius: '0.75rem',
+                                            padding: '1.5rem',
+                                            border: '1px solid rgba(148, 163, 184, 0.2)',
+                                            textAlign: 'center',
+                                            transition: 'all 0.2s'
+                                        }}>
+                                            <div style={{ fontSize: '2rem', marginBottom: '1rem', color: '#8b5cf6' }}>
+                                                {benefit.icon}
+                                            </div>
+                                            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#fff', marginBottom: '0.75rem' }}>
+                                                {benefit.title}
+                                            </h3>
+                                            <p style={{ color: '#94a3b8' }}>{benefit.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div style={{
+                                    backgroundColor: 'linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%)',
+                                    borderRadius: '0.75rem',
+                                    padding: '2rem',
+                                    border: '1px solid rgba(139, 92, 246, 0.3)'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                                        <span style={{ fontSize: '2rem' }}>💻</span>
+                                        <div>
+                                            <h3 style={{ fontSize: '1.25rem', fontWeight: '600', color: '#fff', marginBottom: '0.5rem' }}>
+                                                Готово к началу?
+                                            </h3>
+                                            <p style={{ color: '#e2e8f0', marginBottom: '1rem' }}>
+                                                Создайте репозиторий на GitHub и начните автоматизировать развертывание вашего сервера уже сегодня.
+                                            </p>
+                                            <button style={{
+                                                backgroundColor: '#fff',
+                                                color: '#8b5cf6',
+                                                padding: '0.75rem 1.5rem',
+                                                borderRadius: '0.5rem',
+                                                fontWeight: '600',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s'
+                                            }}>
+                                                Начать развертывание
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Footer */}
+                    <footer style={{
+                        borderTop: '1px solid rgba(148, 163, 184, 0.2)',
+                        marginTop: '4rem',
+                        padding: '2rem'
+                    }}>
+                        <div style={{ maxWidth: '768px', margin: '0 auto', textAlign: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                                <span style={{ fontSize: '1.5rem' }}>🐙</span>
+                                <span style={{ color: '#fff', fontWeight: '600' }}>GitHub Server Deployment Guide</span>
+                            </div>
+                            <p style={{ color: '#94a3b8' }}>
+                                Автоматизируйте развертывание серверов с помощью GitHub Actions
+                            </p>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
